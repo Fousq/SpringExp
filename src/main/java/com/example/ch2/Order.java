@@ -1,5 +1,9 @@
 package com.example.ch2;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -11,20 +15,24 @@ import lombok.Data;
 @Data
 public class Order {
 	
+	private Long id;
+	
+	private Date placedAt;
+	
 	@NotBlank(message="Name is requiered")
-	private String name;
+	private String deliveryName;
 	
 	@NotBlank(message="Street is requiered")
-	private String street;
+	private String deliveryStreet;
 	
 	@NotBlank(message="City is requiered")
-	private String city;
+	private String deliveryCity;
 	
 	@NotBlank(message="State is requiered")
-	private String state;
+	private String deliveryState;
 	
 	@NotBlank(message="Zip is requiered")
-	private String zip;
+	private String deliveryZip;
 	
 	@CreditCardNumber(message="Not Valid")
 	private String ccNumber;
@@ -35,5 +43,11 @@ public class Order {
 	
 	@Digits(integer=3, fraction=0, message="Not Valid CVV")
 	private String ccCVV;
+	
+	private List<Taco> tacos = new ArrayList<>();
+	
+	public void addDesign(Taco design) {
+		this.tacos.add(design);
+	}
 	
 }
