@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.example.ch2.Order;
-import com.example.ch2.database.OrderRepository;
+import com.example.ch2.database.jpa.OrderRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,25 +1,33 @@
 package com.example.ch2.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import com.example.ch2.Ingredient;
-import com.example.ch2.database.IngredientRepository;
+import com.example.ch2.database.jpa.IngredientRepository;
+
+import org.springframework.core.convert.converter.Converter;
 
 @Component
-public class IngredientByIdConverter implements Converter<String, Ingredient>{
+public class IngredientByIdConverter 
+		implements Converter<String, Ingredient>{
 	
-	private IngredientRepository ingredientRep;
+	private IngredientRepository ingredientRepo;
 	
 	@Autowired
-	public IngredientByIdConverter(IngredientRepository ingredientRep ) {
-		this.ingredientRep = ingredientRep;
+	public IngredientByIdConverter(IngredientRepository IngredientRepo) {
+		this.ingredientRepo = ingredientRepo;
 	}
 	
 	@Override
 	public Ingredient convert(String id) {
-		return ingredientRep.findById(id);
+		Optional<Ingredient> optionalIngredient = ingredientRepo.findById(id);
+		System.out.println("IngredientRepo: " + (optionalIngredient.isPresent() ? 
+				optionalIngredient.get() : null));
+		return optionalIngredient.isPresent() ? 
+				optionalIngredient.get() : null;
 	}
 	
 }

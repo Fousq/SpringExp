@@ -20,8 +20,8 @@ import com.example.ch2.Ingredient;
 import com.example.ch2.Ingredient.Type;
 import com.example.ch2.Order;
 import com.example.ch2.Taco;
-import com.example.ch2.database.IngredientRepository;
-import com.example.ch2.database.TacoRepository;
+import com.example.ch2.database.jpa.IngredientRepository;
+import com.example.ch2.database.jpa.TacoRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
