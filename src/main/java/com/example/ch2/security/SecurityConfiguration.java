@@ -1,6 +1,7 @@
 package com.example.ch2.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	@Bean
 	public PasswordEncoder encoder() {
 		return new StandardPasswordEncoder("53cr3t");
 	}
@@ -34,8 +36,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 		 .authorizeRequests()
 		  .antMatchers("/design", "/orders")
-		   .hasRole("ROLE_USER")
-		  .antMatchers("/", "/**").permitAll();
+		   .hasRole("USER")
+		  .antMatchers("/", "/**").permitAll()
+		.and()
+		 .formLogin()
+		  .loginPage("/login")
+		  .defaultSuccessUrl("/design")
+		.and()
+		  .logout()
+		   .logoutSuccessUrl("/")
+		.and()
+		   .csrf()
+		    .ignoringAntMatchers("/h2-console/**")
+	    .and()
+	    	.headers()
+	    	 .frameOptions()
+	    	  .sameOrigin();
 	}
 	
 }
