@@ -3,8 +3,11 @@ package com.example.ch2.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.example.ch2.Order;
+import com.example.ch2.OrderProps;
 import com.example.ch2.User;
 import com.example.ch2.database.jpa.OrderRepository;
 
@@ -26,10 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderController {
 	
 	private OrderRepository orderRep;
+	private OrderProps orderProps;
 	
 	@Autowired
-	public OrderController(OrderRepository orderRep) {
+	public OrderController(OrderRepository orderRep,
+							OrderProps orderProps) {
 		this.orderRep = orderRep;
+		this.orderProps = orderProps;
 	}
 
 	@GetMapping("/current")
@@ -68,6 +75,16 @@ public class OrderController {
 		sessionStatus.setComplete();
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping
+	public String ordersForUsers(@AuthenticationPrincipal User user,
+								Model model) {
+		
+		Pageable pegable = PageRequest.of(0, orderProps.getPageSize());
+		model.addAttribute("orders", orderRep.findByUserOrderByPlacedAtDesc(user, pegable));
+		
+		return "orderList";
 	}
 	
 }
